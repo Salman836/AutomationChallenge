@@ -1,0 +1,98 @@
+name: E2E
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      full_matrix:
+        description: 'Run every browser project, not just Chromium'
+        type: boolean
+        default: false
+      run_performance:
+        description: 'Also run the Trello performance suite'
+        type: boolean
+        default: false
+
+concurrency:
+  group: e2e-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  TRELLO_KEY: ${{ secrets.TRELLO_KEY }}
+  TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+  TELENOR_BASE_URL: https://www.telenor.se
+
+jobs:
+  functional:
+    name: ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ inputs.full_matrix && fromJSON('["api","web-chromium","web-firefox","web-webkit"]') || fromJSON('["api","web-chromium"]') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # The api project talks to Trello over `request` only — it needs no browser.
+      - name: Install browsers
+        if: matrix.project != 'api'
+        run: npx playwright install --with-deps ${{ matrix.project == 'web-firefox' && 'firefox' || matrix.project == 'web-webkit' && 'webkit' || 'chromium' }}
+
+      - name: Run ${{ matrix.project }}
+        run: npx playwright test --project=${{ matrix.project }}
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
+
+  performance:
+    name: performance
+    if: inputs.run_performance
+    needs: functional
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run Trello performance suite
+        run: npx playwright test --project=perf-api --workers=1
+
+      - name: Upload performance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance
+          path: |
+            perf-results/
+            playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Publish summary
+        if: always()
+        run: cat perf-results/perf-summary.md >> "$GITHUB_STEP_SUMMARY" || true
