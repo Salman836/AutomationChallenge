@@ -11,10 +11,9 @@ on:
         description: 'Run every browser project, not just Chromium'
         type: boolean
         default: false
-      run_performance:
-        description: 'Also run the Trello performance suite'
-        type: boolean
-        default: false
+      # No `run_performance` input: the performance job now runs on every trigger,
+      # after the functional suite and non-blocking. A checkbox that no longer
+      # gates anything would be worse than none.
 
 concurrency:
   group: e2e-${{ github.head_ref || github.ref_name }}
@@ -42,14 +41,9 @@ jobs:
 
       - run: npm ci
 
-      # The api project needs no browser, but it shares this job with the web
-      # projects, so whatever they need is installed once here.
       - name: Install browsers
         run: npx playwright install --with-deps ${{ inputs.full_matrix && 'chromium firefox webkit' || 'chromium' }}
 
-      # One Playwright run over both projects rather than a job per project: it
-      # produces a single HTML report and a single job summary covering the whole
-      # functional suite, and the projects still execute in parallel across workers.
       - name: Run functional suites
         run: npx playwright test ${{ inputs.full_matrix && '--project=api --project=web-chromium --project=web-firefox --project=web-webkit' || '--project=api --project=web-chromium' }}
 
@@ -66,8 +60,10 @@ jobs:
           if-no-files-found: ignore
 
   performance:
-    name: performance
-    if: ${{ !cancelled() && inputs.run_performance }}
+    name: performance (non-blocking)
+
+    if: ${{ !cancelled() }}
+    continue-on-error: true
     needs: functional
     runs-on: ubuntu-latest
     timeout-minutes: 30
