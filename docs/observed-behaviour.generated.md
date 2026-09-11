@@ -10,8 +10,8 @@ status, and to raise a documentation defect wherever the two disagree.
 | Case | Endpoint | Expected | Observed | Response body (truncated) |
 | --- | --- | --- | ---: | --- |
 |  Should reject requests with an invalid key | `/1/members/me` | 4xx (401 expected) | **401** | `invalid key` |
-| It should reject DELETE for lists | `/1/lists/6aa4483be8277712d8613b4e` | 4xx (404 expected) | **400** | `Cannot delete open list` |
-| move a card to a list on a different board | `/1/cards/6aa4483de88155d80e7579eb` | 4xx (400 expected) | **404** | `List 6aa4483ef61e273276ab75fc does not exist on board 6aa4483c7ee01e88c37a2265` |
+| It should reject DELETE for lists | `/1/lists/6aa455af8898deb17e165ecb` | 4xx (404 expected) | **400** | `Cannot delete open list` |
+| move a card to a list on a different board | `/1/cards/6aa455b1e85f1246663ab30e` | 4xx (400 expected) | **404** | `List 6aa455b279a83fcfca14fae5 does not exist on board 6aa455b052f1e1c4c1d1987d` |
 | Should reject requests with no credentials | `/1/members/me` | 4xx (401 expected) | **400** | `invalid token` |
 | TRL-N-010 | `/1/boards/` | 4xx (400 expected) | **400** | `{"message":"invalid value for name","error":"ERROR"}` |
 | TRL-N-011 (empty) | `/1/boards/` | 4xx (400 expected) | **400** | `{"message":"invalid value for name","error":"ERROR"}` |
@@ -27,4 +27,4 @@ status, and to raise a documentation defect wherever the two disagree.
 | TRL-N-034 (31/02/2026) | `/1/cards` | 4xx (400 expected) | **400** | `{"message":"invalid date","error":"ERROR"}` |
 | TRL-N-034 (not-a-date) | `/1/cards` | 4xx (400 expected) | **400** | `{"message":"invalid date","error":"ERROR"}` |
 
-_17 input(s) recorded at 2026-09-11T18:28:22.553Z._
+_17 input(s) recorded at 2026-09-11T19:25:50.627Z._

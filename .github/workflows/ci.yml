@@ -29,13 +29,9 @@ env:
 
 jobs:
   functional:
-    name: ${{ matrix.project }}
+    name: functional
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        project: ${{ inputs.full_matrix && fromJSON('["api","web-chromium","web-firefox","web-webkit"]') || fromJSON('["api","web-chromium"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,22 +42,26 @@ jobs:
 
       - run: npm ci
 
-      # The api project talks to Trello over `request` only — it needs no browser.
+      # The api project needs no browser, but it shares this job with the web
+      # projects, so whatever they need is installed once here.
       - name: Install browsers
-        if: matrix.project != 'api'
-        run: npx playwright install --with-deps ${{ matrix.project == 'web-firefox' && 'firefox' || matrix.project == 'web-webkit' && 'webkit' || 'chromium' }}
+        run: npx playwright install --with-deps ${{ inputs.full_matrix && 'chromium firefox webkit' || 'chromium' }}
 
-      - name: Run ${{ matrix.project }}
-        run: npx playwright test --project=${{ matrix.project }}
+      # One Playwright run over both projects rather than a job per project: it
+      # produces a single HTML report and a single job summary covering the whole
+      # functional suite, and the projects still execute in parallel across workers.
+      - name: Run functional suites
+        run: npx playwright test ${{ inputs.full_matrix && '--project=api --project=web-chromium --project=web-firefox --project=web-webkit' || '--project=api --project=web-chromium' }}
 
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: report-${{ matrix.project }}
+          name: report-functional
           path: |
             playwright-report/
             test-results/
+            docs/observed-behaviour.generated.md
           retention-days: 1
           if-no-files-found: ignore
 
