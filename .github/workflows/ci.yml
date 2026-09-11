@@ -24,6 +24,8 @@ env:
   TRELLO_KEY: ${{ secrets.TRELLO_KEY }}
   TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
   TELENOR_BASE_URL: https://www.telenor.se
+  TRELLO_BASE_URL: https://api.trello.com
+  PERF_SAMPLES: 20
 
 jobs:
   functional:
@@ -39,7 +41,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.9
           cache: npm
 
       - run: npm ci
@@ -74,7 +76,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.9
           cache: npm
 
       - run: npm ci
