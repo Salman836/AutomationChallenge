@@ -1,21 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './src/config/env.js';
 
-/**
- * Projects are deliberately explicit rather than a browser matrix over one testDir:
- * the API, browser and performance suites need materially different timeouts,
- * parallelism and tracing, and mixing them under one project hides those differences.
- *
- * `npm test` selects api + web-chromium. The perf-api project exists but is never
- * part of a default run — see README "Running the suites".
- */
-
 /** Shared context for every browser project. */
 const webUse = {
   baseURL: env.telenor.baseUrl,
-  // telenor.se is a Swedish, geo-aware site. Pinning locale, timezone and position
-  // keeps a CI runner in another region from being served a different page (Risk R-08).
-
   trace: 'retain-on-failure',
   video: 'retain-on-failure',
   screenshot: 'only-on-failure',
@@ -23,24 +11,6 @@ const webUse = {
   navigationTimeout: 30_000
 };
 
-/**
- * Authentication for every API spec, applied once.
- *
- * This is the only place in the suite that touches a Trello credential. Because it
- * is an `extraHTTPHeaders` entry on the project, Playwright's built-in `request`
- * fixture is already authenticated in every spec — so the specs are plain
- * `request.post(...)` calls with no auth plumbing, and a key or token never appears
- * in a test file.
- *
- * The header form is used rather than `?key=&token=` so credentials stay out of
- * URLs, and therefore out of access logs and report artifacts (Risk R-05).
- * The spread keeps `--list` and browser-only runs working on a machine that has no
- * Trello credentials at all; the `credentials` fixture raises the actionable error
- * if an API spec then actually runs.
- *
- * Tracing stays off here regardless: a trace records request headers, which is the
- * other way a credential reaches a shared CI artifact. TRL-S-010 asserts the result.
- */
 const apiUse = {
   baseURL: env.trello.baseUrl,
   extraHTTPHeaders: {
@@ -56,8 +26,8 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 4 : undefined,
+  retries: process.env.CI ? 1 : 1,
+  workers: process.env.CI ? 4 : 4,
   timeout: 60_000,
   expect: { timeout: 10_000 },
   globalSetup: './src/hooks/global.setup.js',
