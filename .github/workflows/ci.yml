@@ -11,9 +11,6 @@ on:
         description: 'Run every browser project, not just Chromium'
         type: boolean
         default: false
-      # No `run_performance` input: the performance job now runs on every trigger,
-      # after the functional suite and non-blocking. A checkbox that no longer
-      # gates anything would be worse than none.
 
 concurrency:
   group: e2e-${{ github.head_ref || github.ref_name }}
