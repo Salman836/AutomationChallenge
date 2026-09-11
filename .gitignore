@@ -6,9 +6,6 @@ playwright-report/
 test-results/
 blob-report/
 perf-results/
-docs/observed-behaviour.generated.md
-docs/test-cases/
-.claude
 
 .DS_Store
 *.log
