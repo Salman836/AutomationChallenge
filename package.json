@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "playwright test --project=api --project=web-chromium",
-    "test:api": "playwright test --project=api --ui",
+    "test:api": "playwright test --project=api ",
     "test:api:smoke": "playwright test --project=api --grep @smoke",
     "test:web": "playwright test --project=web-chromium --ui",
     "test:web:all": "playwright test --project=web-chromium --project=web-firefox --project=web-webkit --project=web-mobile",
@@ -17,6 +17,7 @@
     "report": "playwright show-report"
   },
   "devDependencies": {
+    "@estruyf/github-actions-reporter": "^1.10.0",
     "@axe-core/playwright": "^4.10.0",
     "@playwright/test": "^1.47.0",
     "dotenv": "^16.4.5"
