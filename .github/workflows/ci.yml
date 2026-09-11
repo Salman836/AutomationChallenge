@@ -62,12 +62,12 @@ jobs:
           path: |
             playwright-report/
             test-results/
-          retention-days: 14
+          retention-days: 1
           if-no-files-found: ignore
 
   performance:
     name: performance
-    if: inputs.run_performance
+    if: ${{ !cancelled() && inputs.run_performance }}
     needs: functional
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -92,7 +92,7 @@ jobs:
           path: |
             perf-results/
             playwright-report/
-          retention-days: 14
+          retention-days: 1
           if-no-files-found: ignore
 
       - name: Publish summary

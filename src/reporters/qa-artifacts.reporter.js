@@ -1,16 +1,17 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, appendFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { markdownTable } from '../utils/metrics.js';
 
 /**
- * Turns two kinds of test attachment into run-level deliverables:
+ * Turns test attachments into run-level deliverables:
  *
  *   `perf`               -> perf-results/perf-summary.{json,md}
  *   `observed-behaviour` -> docs/observed-behaviour.generated.md
+ *   every test result     -> the GitHub Actions job summary, when running in CI
  *
- * The second one is the loop that closes the plan's "record actual, then tighten"
- * approach to undocumented error codes: after a run, that file states exactly what
- * Trello returned for every input where the reference is silent.
+ * The observed-behaviour file closes the plan's "record actual, then tighten"
+ * approach to undocumented error codes: after a run, it states exactly what Trello
+ * returned for every input where the reference is silent.
  */
 export default class QaArtifactsReporter {
   constructor(options = {}) {
@@ -20,7 +21,20 @@ export default class QaArtifactsReporter {
     this.perf = [];
     /** @type {any[]} */
     this.observed = [];
+    /** Outcome tallies and failure details for the job summary. */
+    this.tally = { passed: 0, failed: 0, flaky: 0, skipped: 0 };
+    /** @type {{ title: string, project: string, error: string }[]} */
+    this.failures = [];
+    /** @type {Set<string>} */
+    this.projects = new Set();
     this.startedAt = new Date();
+  }
+
+  onBegin(config, suite) {
+    // Kept so the summary can walk every test exactly once in onEnd. Tallying in
+    // onTestEnd would double-count: that hook fires once per *attempt*, so with
+    // retries enabled a single failing test reports itself twice.
+    this.suite = suite;
   }
 
   onTestEnd(test, result) {
@@ -43,6 +57,82 @@ export default class QaArtifactsReporter {
   onEnd(result) {
     if (this.perf.length > 0) this.#writePerf(result);
     if (this.observed.length > 0) this.#writeObserved();
+    this.#writeJobSummary(result);
+  }
+
+  /**
+   * Append a run summary to the GitHub Actions job summary panel.
+   *
+   * `GITHUB_STEP_SUMMARY` is only set inside Actions, so this is a no-op locally.
+   * It is appended, not overwritten, because several steps in a job may contribute
+   * — the perf job also pipes its latency table in.
+   */
+  #writeJobSummary(result) {
+    const file = process.env.GITHUB_STEP_SUMMARY;
+    if (!file) return;
+
+    // `outcome()` collapses retries: a test that passed on retry is "flaky", not a
+    // failure. Walking allTests() counts each test once regardless of attempts.
+    for (const test of this.suite?.allTests() ?? []) {
+      const project = test.parent?.project()?.name ?? 'unknown';
+      this.projects.add(project);
+
+      const outcome = test.outcome();
+      if (outcome === 'expected') this.tally.passed += 1;
+      else if (outcome === 'flaky') this.tally.flaky += 1;
+      else if (outcome === 'skipped') this.tally.skipped += 1;
+      else {
+        this.tally.failed += 1;
+        this.failures.push({
+          title: test.titlePath().slice(3).filter(Boolean).join(' › ') || test.title,
+          project,
+          error: (test.results.at(-1)?.error?.message ?? 'no error message')
+            .replace(/\[[0-9;]*m/g, '') // strip ANSI colour
+            .split('\n')[0]
+            .slice(0, 160),
+        });
+      }
+    }
+
+    const { passed, failed, flaky, skipped } = this.tally;
+    const icon = result.status === 'passed' ? '✅' : result.status === 'timedout' ? '⏱️' : '❌';
+    const projects = [...this.projects].sort().join(', ') || 'none';
+    const seconds = ((Date.now() - this.startedAt.getTime()) / 1000).toFixed(1);
+
+    const lines = [
+      `## ${icon} ${projects} — ${result.status}`,
+      '',
+      '| Passed | Failed | Flaky | Skipped | Duration |',
+      '| ---: | ---: | ---: | ---: | ---: |',
+      `| ${passed} | ${failed} | ${flaky} | ${skipped} | ${seconds}s |`,
+      '',
+    ];
+
+    if (this.failures.length > 0) {
+      lines.push('### Failures', '', '| Test | Project | Error |', '| --- | --- | --- |');
+      for (const failure of this.failures.slice(0, 25)) {
+        lines.push(`| ${escapeCell(failure.title)} | ${failure.project} | ${escapeCell(failure.error)} |`);
+      }
+      if (this.failures.length > 25) {
+        lines.push('', `_…and ${this.failures.length - 25} more. See the uploaded HTML report._`);
+      }
+      lines.push('');
+    }
+
+    if (flaky > 0) {
+      lines.push(
+        `> ⚠️ ${flaky} test(s) passed only on retry. Both suites hit third-party systems, ` +
+          'so a flake here is usually the network rather than a defect — but a test that ' +
+          'flakes repeatedly is worth pinning down.',
+        '',
+      );
+    }
+
+    try {
+      appendFileSync(file, `${lines.join('\n')}\n`, 'utf8');
+    } catch {
+      // A summary that cannot be written must never fail the run.
+    }
   }
 
   #write(file, contents) {
@@ -122,4 +212,9 @@ export default class QaArtifactsReporter {
     // eslint-disable-next-line no-console
     console.log(`  Observed-behaviour notes written to ${path}`);
   }
+}
+
+/** Pipes and newlines would break out of a markdown table cell. */
+function escapeCell(text) {
+  return String(text).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
 }

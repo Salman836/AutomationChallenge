@@ -1,6 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './src/config/env.js';
-
+/**
+ @typedef {import("@estruyf/github-actions-reporter").GitHubActionOptions} GitHubActionOptions
+ */
 /** Shared context for every browser project. */
 const webUse = {
   baseURL: env.telenor.baseUrl,
@@ -34,7 +36,7 @@ export default defineConfig({
   globalTeardown: './src/hooks/global.teardown.js',
   outputDir: './test-results',
 
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'test-results/junit.xml' }], ['./src/reporters/qa-artifacts.reporter.js'], ...(process.env.CI ? [['github']] : [])],
+  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'test-results/junit.xml' }], ['./src/reporters/qa-artifacts.reporter.js'], ...(process.env.CI ? [['@estruyf/github-actions-reporter']] : [['@estruyf/github-actions-reporter']])],
 
   projects: [
     {
