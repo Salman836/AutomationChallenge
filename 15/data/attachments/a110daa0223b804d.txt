@@ -1,0 +1,1 @@
+[note] move a card to a list on a different board: expected 400, Trello returned 404 — recorded.

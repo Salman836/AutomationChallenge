@@ -1,0 +1,1 @@
+{"caseId":"It should reject DELETE for lists","endpoint":"/1/lists/6aa55a4ea751b29a4d6ece69","expectation":"4xx (404 expected)","observedStatus":400,"observedBody":"Cannot delete open list","project":"api","at":"2026-09-12T13:57:34.855Z"}

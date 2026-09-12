@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-020","endpoint":"/1/lists","expectation":"4xx (400 expected)","observedStatus":400,"observedBody":"{\"message\":\"invalid value for name\",\"error\":\"BAD_REQUEST_ERROR\"}","project":"api","at":"2026-09-12T13:57:34.125Z"}
