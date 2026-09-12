@@ -8,18 +8,19 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "test": "playwright test --project=api --project=web-chromium",
+    "test": "playwright test --project=api --project=web-chromium --project=web-firefox --project=web-webkit",
     "test:api": "playwright test --project=api ",
     "test:api:smoke": "playwright test --project=api --grep @smoke",
     "test:web": "playwright test --project=web-chromium --ui",
     "test:web:all": "playwright test --project=web-chromium --project=web-firefox --project=web-webkit --project=web-mobile",
-    "test:perf:api": "playwright test --project=perf-api --workers=1 --ui",
+    "test:perf:api": "playwright test --project=perf-api --workers=1",
     "report": "playwright show-report"
   },
   "devDependencies": {
-    "@estruyf/github-actions-reporter": "^1.10.0",
     "@axe-core/playwright": "^4.10.0",
+    "@estruyf/github-actions-reporter": "^1.10.0",
     "@playwright/test": "^1.47.0",
+    "allure-playwright": "^3.12.1",
     "dotenv": "^16.4.5"
   }
 }
