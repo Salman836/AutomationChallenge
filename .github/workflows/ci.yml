@@ -6,11 +6,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
-    inputs:
-      full_matrix:
-        description: 'Run every browser project, not just Chromium'
-        type: boolean
-        default: false
 
 concurrency:
   group: e2e-${{ github.head_ref || github.ref_name }}
@@ -42,10 +37,13 @@ jobs:
       - run: npm ci
 
       - name: Install browsers
-        run: npx playwright install --with-deps ${{ inputs.full_matrix && 'chromium firefox webkit' || 'chromium' }}
+        run: npx playwright install --with-deps chromium firefox webkit
 
+      # One Playwright run over every functional project: a single HTML report and a
+      # single job summary covering the whole suite, with the projects still executing
+      # in parallel across workers.
       - name: Run functional suites
-        run: npx playwright test ${{ inputs.full_matrix && '--project=api --project=web-chromium --project=web-firefox --project=web-webkit' || '--project=api --project=web-chromium' }}
+        run: npx playwright test --project=api --project=web-chromium --project=web-firefox --project=web-webkit
 
       - name: Upload report
         if: always()
