@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Playwright + JavaScript automation for the Trello REST API workflow and the Telenor broadband E2E journey",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "test": "playwright test --project=api --project=web-chromium --project=web-firefox --project=web-webkit",

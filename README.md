@@ -3,7 +3,7 @@
 End-to-end and API automation for two independent targets, delivered from one Playwright
 project: the **Trello REST API v1** and the **telenor.se** broadband purchase journey.
 
-**Stack** — Playwright Test · JavaScript (ESM) · Node 20+ · GitHub Actions · Allure
+**Stack** — Playwright Test · JavaScript (ESM) · Node 22+ · GitHub Actions · Allure
 
 ```bash
 npm ci && npx playwright install chromium
@@ -18,11 +18,12 @@ npm test                    # api + web-chromium — 65 tests, ~1 min
 | Suite | Tests | Target | Technique |
 | --- | ---: | --- | --- |
 | `api` | 64 | Trello REST v1 | Lifecycle, contract, negative/boundary, auth & data integrity |
-| `web-chromium` | 1 | telenor.se | Page-object-driven purchase journey |
+| `web-chromium` · `web-firefox` · `web-webkit` | 1 each | telenor.se | Page-object-driven purchase journey, same spec across all three engines |
 | `perf-api` | 2 | Trello REST v1 | Client-observed latency against p95 budgets |
 
-Browser projects also exist for Firefox, WebKit and mobile viewport (`--project=web-firefox`,
-`web-webkit`, `web-mobile`), sharing the same page objects.
+CI runs all three browser engines on every push — 67 tests, ~90s. A `web-mobile` project
+(iPhone 13 viewport) shares the same page objects and can be added with
+`--project=web-mobile`.
 
 **Trello lifecycle under test** — `board → list → card → update → teardown`, with every
 write verified by an independent re-read and confirmed a second time against the
@@ -135,7 +136,7 @@ Budgets live in `src/data/perfBudgets.js`; the series label *is* the budget key.
 
 | Job | Command | Gating |
 | --- | --- | --- |
-| `functional` | `playwright test --project=api --project=web-chromium` | Blocking |
+| `functional` | `playwright test --project=api --project=web-{chromium,firefox,webkit}` | Blocking |
 | `performance (non-blocking)` | `playwright test --project=perf-api --workers=1` | `continue-on-error` |
 | `allure report` | Publishes to the `allure` branch | Non-blocking, skipped on PRs |
 
@@ -151,8 +152,8 @@ traffic both contaminates latency and multiplies rate-limit pressure on one toke
 ref: pushing to a branch with an open PR fires both `push` and `pull_request`, which carry
 different refs, so a ref-keyed group would let two runs hit the same Trello token at once.
 
-Manual dispatch exposes a `full_matrix` input that extends the same command to Firefox
-and WebKit.
+All three browser engines run on every trigger, so the workflow takes no inputs — there is
+nothing left to toggle.
 
 ---
 
