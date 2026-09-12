@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-022","endpoint":"/1/lists","expectation":"4xx (404 expected)","observedStatus":401,"observedBody":"unauthorized board list requested 5f5f5f5f5f5f5f5f5f5f5f5f","project":"api","at":"2026-09-12T20:18:34.247Z"}
