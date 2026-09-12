@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-030","endpoint":"/1/cards","expectation":"4xx (400 expected)","observedStatus":429,"observedBody":"{\"message\":\"Rate limit exceeded: requests per interval for API token\",\"error\":\"API_TOKEN_LIMIT_EXCEEDED\"}","project":"api","at":"2026-09-12T19:49:59.376Z"}

@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-010","endpoint":"/1/boards/","expectation":"4xx (400 expected)","observedStatus":400,"observedBody":"{\"message\":\"invalid value for name\",\"error\":\"ERROR\"}","project":"api","at":"2026-09-12T19:49:56.012Z"}
