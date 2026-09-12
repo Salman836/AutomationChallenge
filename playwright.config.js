@@ -7,8 +7,8 @@ import { env } from './src/config/env.js';
 const webUse = {
   baseURL: env.telenor.baseUrl,
   trace: 'retain-on-failure',
-  video: 'retain-on-failure',
-  screenshot: 'only-on-failure',
+  video: 'on',
+  screenshot: 'on',
   actionTimeout: 15_000,
   navigationTimeout: 30_000
 };
@@ -19,7 +19,7 @@ const apiUse = {
     Accept: 'application/json',
     ...(env.trello.isConfigured ? { Authorization: env.trello.authHeader } : {})
   },
-  trace: 'off',
+  trace: 'retain-on-failure',
   video: 'off',
   screenshot: 'off'
 };
