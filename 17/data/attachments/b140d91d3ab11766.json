@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-012","endpoint":"/1/boards/not-a-valid-id","expectation":"4xx (400 expected)","observedStatus":400,"observedBody":"invalid id","project":"api","at":"2026-09-12T19:44:39.384Z"}
