@@ -29,14 +29,14 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 1,
-  workers: process.env.CI ? 4 : 4,
+  workers: process.env.CI ? 2 : 2,
   timeout: 60_000,
   expect: { timeout: 10_000 },
   globalSetup: './src/hooks/global.setup.js',
   globalTeardown: './src/hooks/global.teardown.js',
   outputDir: './test-results',
 
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'test-results/junit.xml' }], ['./src/reporters/qa-artifacts.reporter.js'], ...(process.env.CI ? [['@estruyf/github-actions-reporter']] : [['@estruyf/github-actions-reporter']])],
+  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'test-results/junit.xml' }], ['./src/reporters/qa-artifacts.reporter.js'], ...(process.env.CI ? [['@estruyf/github-actions-reporter'], ['allure-playwright', { outputFolder: 'allure-results' }]] : [['@estruyf/github-actions-reporter'], ['allure-playwright', { outputFolder: 'allure-results' }]])],
 
   projects: [
     {

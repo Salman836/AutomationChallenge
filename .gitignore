@@ -6,6 +6,6 @@ playwright-report/
 test-results/
 blob-report/
 perf-results/
-
+allure-results/
 .DS_Store
 *.log
