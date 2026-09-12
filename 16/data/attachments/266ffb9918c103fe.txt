@@ -1,0 +1,1 @@
+[note] It should reject DELETE for lists: expected 404, Trello returned 400 — recorded.
