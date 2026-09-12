@@ -1,0 +1,1 @@
+{"caseId":"move a card to a list on a different board","endpoint":"/1/cards/6aa55f031912238e92c778e7","expectation":"4xx (400 expected)","observedStatus":404,"observedBody":"List 6aa55f033dc3ff655b8b8629 does not exist on board 6aa55f03700a85983b8afdcd","project":"api","at":"2026-09-12T14:17:40.113Z"}

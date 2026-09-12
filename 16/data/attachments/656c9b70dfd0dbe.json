@@ -1,0 +1,1 @@
+{"caseId":"Should reject requests with no credentials","endpoint":"/1/members/me","expectation":"4xx (401 expected)","observedStatus":400,"observedBody":"invalid token","project":"api","at":"2026-09-12T14:17:11.944Z"}
