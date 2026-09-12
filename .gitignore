@@ -7,5 +7,6 @@ test-results/
 blob-report/
 perf-results/
 allure-results/
+allure-report/
 .DS_Store
 *.log

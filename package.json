@@ -8,7 +8,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "test": "playwright test --project=api --project=web-chromium",
+    "test": "playwright test --project=api --project=web-chromium --project=web-firefox --project=web-webkit",
     "test:api": "playwright test --project=api ",
     "test:api:smoke": "playwright test --project=api --grep @smoke",
     "test:web": "playwright test --project=web-chromium --ui",
