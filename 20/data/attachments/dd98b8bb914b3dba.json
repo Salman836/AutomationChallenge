@@ -1,0 +1,23 @@
+{
+  "summaries": [
+    {
+      "label": "WORKFLOW /five-steps",
+      "n": 5,
+      "coldStartMs": null,
+      "p50": 1735.1,
+      "p90": 1806.5,
+      "p95": 1818.8,
+      "max": 1831.1,
+      "mean": 1750.2,
+      "stdev": 46.4,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 6000,
+        "ceiling": 12000
+      },
+      "status": "PASS",
+      "reasons": []
+    }
+  ]
+}

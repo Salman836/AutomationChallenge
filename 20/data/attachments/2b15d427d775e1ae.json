@@ -1,0 +1,270 @@
+{
+  "summaries": [
+    {
+      "label": "POST /1/boards/",
+      "n": 19,
+      "coldStartMs": 421.2,
+      "p50": 386.9,
+      "p90": 518.1,
+      "p95": 579.1,
+      "max": 710.5,
+      "mean": 422.5,
+      "stdev": 88.7,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1500,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "DELETE /1/boards/{id}",
+      "n": 19,
+      "coldStartMs": 592.2,
+      "p50": 591.2,
+      "p90": 834.3,
+      "p95": 944,
+      "max": 985.1,
+      "mean": 647.8,
+      "stdev": 130.8,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1500,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "GET /1/boards/{id}",
+      "n": 19,
+      "coldStartMs": 164.9,
+      "p50": 166.1,
+      "p90": 179.2,
+      "p95": 184.8,
+      "max": 223.5,
+      "mean": 169.1,
+      "stdev": 14.9,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 900,
+        "ceiling": 2500
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "PUT /1/boards/{id}",
+      "n": 19,
+      "coldStartMs": 230.4,
+      "p50": 222.8,
+      "p90": 342.8,
+      "p95": 351.7,
+      "max": 388.9,
+      "mean": 258.5,
+      "stdev": 57.5,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1200,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "POST /1/lists",
+      "n": 19,
+      "coldStartMs": 234.7,
+      "p50": 231.8,
+      "p90": 325,
+      "p95": 379.3,
+      "max": 391.2,
+      "mean": 248.8,
+      "stdev": 51.4,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1200,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "GET /1/boards/{id}/lists",
+      "n": 19,
+      "coldStartMs": 176.3,
+      "p50": 165.6,
+      "p90": 257.4,
+      "p95": 263.7,
+      "max": 273.5,
+      "mean": 181.4,
+      "stdev": 37.4,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1000,
+        "ceiling": 2500
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "GET /1/lists/{id}",
+      "n": 19,
+      "coldStartMs": 152.1,
+      "p50": 155.5,
+      "p90": 195.7,
+      "p95": 205.7,
+      "max": 241.6,
+      "mean": 165,
+      "stdev": 23.1,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 900,
+        "ceiling": 2500
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "PUT /1/lists/{id}",
+      "n": 19,
+      "coldStartMs": 208.1,
+      "p50": 199.4,
+      "p90": 230,
+      "p95": 232.8,
+      "max": 233.5,
+      "mean": 203.9,
+      "stdev": 15.5,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1100,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "GET /1/lists/{id}/cards",
+      "n": 19,
+      "coldStartMs": 154.3,
+      "p50": 158.6,
+      "p90": 171.4,
+      "p95": 180.2,
+      "max": 193.5,
+      "mean": 161.2,
+      "stdev": 10.1,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1000,
+        "ceiling": 2500
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "POST /1/cards",
+      "n": 19,
+      "coldStartMs": 355.6,
+      "p50": 344.9,
+      "p90": 429.7,
+      "p95": 460.5,
+      "max": 497.2,
+      "mean": 369.4,
+      "stdev": 47.6,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1200,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "DELETE /1/cards/{id}",
+      "n": 19,
+      "coldStartMs": 279.2,
+      "p50": 308.4,
+      "p90": 353.5,
+      "p95": 408.8,
+      "max": 446.7,
+      "mean": 319.6,
+      "stdev": 40.7,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1100,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "GET /1/cards/{id}",
+      "n": 19,
+      "coldStartMs": 160.9,
+      "p50": 166.9,
+      "p90": 264.5,
+      "p95": 267.3,
+      "max": 283,
+      "mean": 184.5,
+      "stdev": 39,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 800,
+        "ceiling": 2500
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "PUT /1/cards/{id}",
+      "n": 19,
+      "coldStartMs": 384.3,
+      "p50": 243.8,
+      "p90": 334,
+      "p95": 390.8,
+      "max": 392,
+      "mean": 263.4,
+      "stdev": 49.1,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1100,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    },
+    {
+      "label": "GET /1/boards/{id}/actions",
+      "n": 19,
+      "coldStartMs": 228.7,
+      "p50": 263.3,
+      "p90": 321,
+      "p95": 339.9,
+      "max": 405,
+      "mean": 269.7,
+      "stdev": 44.5,
+      "errors": 0,
+      "errorRate": 0,
+      "budget": {
+        "p95": 1200,
+        "ceiling": 3000
+      },
+      "status": "PASS",
+      "reasons": []
+    }
+  ]
+}
