@@ -36,7 +36,7 @@ export default defineConfig({
   globalTeardown: './src/hooks/global.teardown.js',
   outputDir: './test-results',
 
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'test-results/junit.xml' }], ['./src/reporters/qa-artifacts.reporter.js'], ...(process.env.CI ? [['@estruyf/github-actions-reporter'], ['allure-playwright', { outputFolder: 'allure-results' }]] : [['@estruyf/github-actions-reporter'], ['allure-playwright', { outputFolder: 'allure-results' }]])],
+  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'test-results/junit.xml' }], ['./src/reporters/qa-artifacts.reporter.js'], ['@estruyf/github-actions-reporter'], ['allure-playwright', { outputFolder: 'allure-results' }]],
 
   projects: [
     {
@@ -58,13 +58,6 @@ export default defineConfig({
       name: 'web-webkit',
       testDir: './tests/web',
       use: { ...devices['Desktop Safari'], ...webUse, viewport: { width: 1920, height: 1080 } }
-    },
-    {
-      name: 'web-mobile',
-      testDir: './tests/web',
-      // TEL-C-004. iPhone 13 already sets viewport, UA, touch and deviceScaleFactor;
-      // webUse must not re-set viewport here or the device profile is broken.
-      use: { ...devices['iPhone 13'], ...webUse, viewport: devices['iPhone 13'].viewport }
     },
     {
       name: 'perf-api',
