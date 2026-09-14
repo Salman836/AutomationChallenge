@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-034 (not-a-date)","endpoint":"/1/cards","expectation":"4xx (400 expected)","observedStatus":400,"observedBody":"{\"message\":\"invalid date\",\"error\":\"ERROR\"}","project":"api","at":"2026-09-14T07:43:23.312Z"}

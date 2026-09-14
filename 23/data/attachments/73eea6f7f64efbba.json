@@ -1,0 +1,1 @@
+{"caseId":"TRL-N-031","endpoint":"/1/cards","expectation":"4xx (400 expected)","observedStatus":400,"observedBody":"invalid value for idList","project":"api","at":"2026-09-14T07:43:22.152Z"}
